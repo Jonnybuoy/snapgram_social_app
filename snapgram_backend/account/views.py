@@ -8,6 +8,7 @@ from .forms import SignupForm
 @authentication_classes([])
 @permission_classes([])
 def signup(request):
+    """Endpoint to handle the sign up process."""
     data = request.data
     message = 'success'
     
@@ -31,6 +32,7 @@ def signup(request):
 
 @api_view(['GET'])
 def me(request):
+    """Endpoint to handle the login process."""
     return JsonResponse({
         'id': request.user.id,
         'name': request.user.name,

@@ -1,3 +1,15 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+from rest_framework.decorators import authentication_classes, api_view, permission_classes
+
+from .models import Post
+from .serializers import PostSerializer
+
+
+@api_view(['GET'])
+def post_list(request):
+    posts = Post.objects.all()
+    
+    serializer = PostSerializer(posts, many=True)
+    
+    return JsonResponse({'data': serializer.data})

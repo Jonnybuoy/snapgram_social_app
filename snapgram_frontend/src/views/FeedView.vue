@@ -25,7 +25,7 @@
                </div>
            </div>
 
-           <div class="p-4 bg-white border border-gray-200 rounded-lg">
+           <!----<div class="p-4 bg-white border border-gray-200 rounded-lg">
                <div class="mb-6 flex items-center justify-between">
                    <div class="flex items-center space-x-4">
                        <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
@@ -61,19 +61,22 @@
                         </svg>
                     </div>
                </div>
-           </div>
-           <div class="p-4 bg-white border border-gray-200 rounded-lg">
+           </div>--->
+           <div class="p-4 bg-white border border-gray-200 rounded-lg"
+                v-for="post in posts"
+                v-bind:key="post.id"
+            >
                <div class="mb-6 flex items-center justify-between">
                    <div class="flex items-center space-x-4">
                        <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
 
-                       <p><strong>Johnson Kaberere</strong></p>
+                       <p><strong>{{ post.created_by.name }}</strong></p>
                    </div>
                    
-                   <p class="text-gray-600">18 minutes ago</p>
+                   <p class="text-gray-600">{{ post.created_at_formatted }} ago</p>
                </div>
 
-               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, eligendi at. Vel cumque mollitia quod eligendi sunt rerum quidem nisi. Eligendi explicabo culpa alias optio aspernatur eveniet itaque quam placeat.</p>
+               <p>{{ post.body }}</p>
 
 
                <div class="my-6 flex justify-between">
@@ -111,6 +114,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import PeopleYouMayKnow from '../components/PeopleYouMayKnow.vue'
 import Trends from '../components/Trends.vue'
 
@@ -119,7 +123,33 @@ export default {
     components: {
         PeopleYouMayKnow,
         Trends
-        },
+    },
+
+    data() {
+        return {
+            posts: []
+        }
+    },
+
+
+    mounted() {
+        this.getFeed()
+    },
+
+    methods: {
+        getFeed() {
+            axios
+                .get('/api/posts/')
+                .then(response => {
+                    console.log('data', response.data)
+
+                    this.posts = response.data
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        }
+    }
 
 }
 </script>
